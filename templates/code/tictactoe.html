@@ -163,14 +163,21 @@
       document.getElementById('scoreDraw').textContent = scores.draw;
     }
 
-    function render() {
-      const cells = document.querySelectorAll('.cell');
-      board.forEach((val, i) => {
-        cells[i].textContent = val;
-        cells[i].className = 'cell' + (val ? ' ' + val.toLowerCase() : '');
-        cells[i].onclick = val ? null : () => handleClick(i);
-      });
-    }
+function render() {
+  const cells = document.querySelectorAll('.cell');
+
+  board.forEach((val, i) => {
+    cells[i].textContent = val;
+
+    // clean + safe class handling
+    cells[i].classList.remove('x', 'o');
+
+    if (val === 'X') cells[i].classList.add('x');
+    if (val === 'O') cells[i].classList.add('o');
+
+    cells[i].onclick = val ? null : () => handleClick(i);
+  });
+}
 
     function resetGame() {
       board = ['', '', '', '', '', '', '', '', ''];
