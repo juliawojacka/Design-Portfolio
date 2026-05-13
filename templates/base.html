@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{% block title %}Julia Wojacka{% endblock %}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Mono', monospace;
+      background: #F5F0E8;
+      color: #2C2A22;
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 3rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5rem;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: #7A7560;
+    }
+
+    nav a {
+      color: #7A7560;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      color: #4A5A2A;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 52px;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: #6B7A3A;
+    }
+
+    hr {
+      border: none;
+      border-top: 0.5px solid #D4CBAF;
+      margin: 3rem 0;
+    }
+
+    .label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: #9A9278;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: #D4CBAF;
+      border: 0.5px solid #D4CBAF;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 4rem;
+    }
+
+    .card {
+      background: #F5F0E8;
+      padding: 1.5rem;
+      text-decoration: none;
+      display: block;
+      transition: background 0.15s;
+    }
+
+    .card:hover {
+      background: #EDE6D6;
+    }
+
+    .card-tag {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: #6B7A3A;
+      margin-bottom: 0.75rem;
+    }
+
+    .card h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+      color: #2C2A22;
+    }
+
+    .card p {
+      font-size: 12px;
+      color: #6B6850;
+      line-height: 1.7;
+    }
+
+    .card-arrow {
+      font-size: 11px;
+      color: #6B7A3A;
+      margin-top: 1.25rem;
+      display: block;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #9A9278;
+      padding-top: 1.5rem;
+      border-top: 0.5px solid #D4CBAF;
+      margin-top: 4rem;
+    }
+
+    footer a {
+      color: #7A7560;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #4A5A2A;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .avail {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #6B7A3A;
+      display: inline-block;
+    }
+
+    @media (max-width: 600px) {
+      .wrap { padding: 1.5rem 1.25rem 2rem; }
+      nav { margin-bottom: 3rem; }
+      .nav-links { gap: 1rem; }
+      h1 { font-size: 36px; }
+      .grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+
+  {% block extra_styles %}{% endblock %}
+</head>
+
+<body>
+  <div class="wrap">
+    <nav>
+      <a href="/">home</a>
+      <div class="nav-links">
+        <a href="/design">design</a>
+        <a href="/code">code</a>
+        <a href="/about">about</a>
+        <a href="/contact">contact</a>
+      </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+      <div class="avail">
+        <span class="dot"></span>
+        <span>Available for work</span>
+      </div>
+
+      <div class="footer-links">
+        <a href="#">GitHub</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Email</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
