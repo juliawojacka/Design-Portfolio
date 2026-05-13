@@ -1,36 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Design — Julia Wojacka</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'DM Mono', monospace; background: #F5F0E8; color: #2C2A22; min-height: 100vh; }
-    .wrap { max-width: 1400px; margin: 0 auto; padding: 2.5rem 4rem 3rem; }
-    nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5rem; font-size: 12px; letter-spacing: 0.08em; color: #7A7560; }
-    nav a { color: #7A7560; text-decoration: none; }
-    nav a:hover { color: #4A5A2A; }
-    .nav-links { display: flex; gap: 2rem; }
-    h1 { font-family: 'DM Serif Display', serif; font-size: 72px; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 2rem; }
-    p { font-size: 13px; color: #6B6850; line-height: 1.8; }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <nav>
-      <a href="/">HOME</a>
-      <div class="nav-links">
-        <a href="/design">design</a>
-        <a href="/code">code</a>
-        <a href="/about">about</a>
-        <a href="/contact">contact</a>
-      </div>
-    </nav>
-    <h1>Design</h1>
-    <p>Coming soon.</p>
-  </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Design — Julia Wojacka{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 3rem;">
+  <h1>Design —<br><em>product & industrial</em></h1>
+  <p style="font-size: 13px; color: #6B6850; line-height: 1.8; max-width: 500px;">Product and industrial design work from my BA at Central Saint Martins, 2022–2025.</p>
+</div>
+
+<hr>
+
+<p class="label">Case studies</p>
+<div class="grid">
+  <a href="#" class="card">
+    <p class="card-tag">PRODUCT DESIGN — WEARABLE TECH</p>
+    <h2>Inertia</h2>
+    <p>A flexible wearable sensor that helps volleyball beginners build confidence through real-time movement feedback.</p>
+    <span class="card-arrow">coming soon →</span>
+  </a>
+  <a href="#" class="card">
+    <p class="card-tag">INDUSTRIAL DESIGN — SPECULATIVE</p>
+    <h2>NutriPrint</h2>
+    <p>A 3D food dispenser using molecular gastronomy to deliver personalised, nutrient-rich meals affordably.</p>
+    <span class="card-arrow">coming soon →</span>
+  </a>
+  <a href="#" class="card">
+    <p class="card-tag">PRODUCT DESIGN — BROMPTON BRIEF</p>
+    <h2>Fluxor</h2>
+    <p>A self-defence flashlight integrated into a bike handlebar. Automatically activates when pulled.</p>
+    <span class="card-arrow">coming soon →</span>
+  </a>
+</div>
+{% endblock %}

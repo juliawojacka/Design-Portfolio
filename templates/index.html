@@ -1,245 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Julia Wojacka — Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+{% extends "base.html" %}
+{% block title %}Julia Wojacka — Portfolio{% endblock %}
 
-    body {
-      font-family: 'DM Mono', monospace;
-      background: #F5F0E8;
-      color: #2C2A22;
-      min-height: 100vh;
-    }
+{% block content %}
+<div style="margin-bottom: 5rem;">
+  <h1>Julia Wojacka —<br><em>designer & developer</em></h1>
+  <p style="font-size: 13px; color: #6B6850; line-height: 1.8; max-width: 500px;">Product & Industrial designer with an eye for detail and a love for creative technologies. BA from Central Saint Martins, now studying MSc Applied Machine Learning for Creatives at the Creative Computing Institute. Born in Germany, raised in Poland, working across physical objects and data tools.</p>
+</div>
 
-    .wrap {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2.5rem 4rem 3rem;
-    }
+<hr>
 
-    /* NAV */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 5rem;
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      color: #7A7560;
-    }
-    nav a { color: #7A7560; text-decoration: none; }
-    nav a:hover { color: #4A5A2A; }
-    .nav-links { display: flex; gap: 2rem; }
+<p class="label">Selected work</p>
+<div class="grid">
+  <a href="/design" class="card">
+    <p class="card-tag">PRODUCT DESIGN — WEARABLE TECH</p>
+    <h2>Inertia</h2>
+    <p>A flexible wearable sensor that helps volleyball beginners build confidence through real-time movement feedback.</p>
+    <span class="card-arrow">view case study →</span>
+  </a>
+  <a href="/design" class="card">
+    <p class="card-tag">INDUSTRIAL DESIGN — SPECULATIVE</p>
+    <h2>NutriPrint</h2>
+    <p>A 3D food dispenser using molecular gastronomy to deliver personalised, nutrient-rich meals affordably.</p>
+    <span class="card-arrow">view case study →</span>
+  </a>
+  <a href="/design" class="card">
+    <p class="card-tag">PRODUCT DESIGN — BROMPTON BRIEF</p>
+    <h2>Fluxor</h2>
+    <p>A self-defence flashlight integrated into a bike handlebar. Automatically activates when pulled.</p>
+    <span class="card-arrow">view case study →</span>
+  </a>
+  <a href="/code" class="card">
+    <p class="card-tag">CODE — GAMES / ML / DATA</p>
+    <h2>Coding projects</h2>
+    <p>Scripts, data tools, and games built across Python and ML. From 100 Days of Code to machine learning experiments.</p>
+    <span class="card-arrow">view projects →</span>
+  </a>
+</div>
 
-    /* HERO */
-    .hero { margin-bottom: 5rem; }
-    .hero h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 72px;
-      font-weight: 400;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
-      letter-spacing: -0.02em;
-    }
-    .hero h1 em { font-style: italic; color: #6B7A3A; }
-    .hero p {
-      font-size: 14px;
-      color: #6B6850;
-      line-height: 1.8;
-      max-width: 600px;
-    }
+<hr>
 
-    /* DIVIDER */
-    hr {
-      border: none;
-      border-top: 0.5px solid #D4CBAF;
-      margin: 3rem 0;
-    }
-
-    /* SECTION LABEL */
-    .label {
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      color: #9A9278;
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-    }
-
-    /* PROJECT GRID */
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 1px;
-      background: #D4CBAF;
-      border: 0.5px solid #D4CBAF;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 4rem;
-    }
-    .card {
-      background: #F5F0E8;
-      padding: 1.75rem;
-      text-decoration: none;
-      display: block;
-      transition: background 0.15s;
-    }
-    .card:hover { background: #EDE6D6; }
-    .card-tag {
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      color: #6B7A3A;
-      margin-bottom: 0.75rem;
-      font-family: 'DM Mono', monospace;
-    }
-    .card h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 22px;
-      font-weight: 400;
-      margin-bottom: 0.5rem;
-      color: #2C2A22;
-    }
-    .card p {
-      font-size: 12px;
-      color: #6B6850;
-      line-height: 1.7;
-    }
-    .card-arrow {
-      font-size: 11px;
-      color: #6B7A3A;
-      margin-top: 1.25rem;
-      display: block;
-    }
-
-    /* ABOUT */
-    .about {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6rem;
-      margin-bottom: 4rem;
-    }
-    .about-text {
-      font-size: 13px;
-      color: #6B6850;
-      line-height: 1.9;
-    }
-
-    /* SKILLS */
-    .skills { display: flex; flex-direction: column; }
-    .skill-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      padding: 0.5rem 0;
-      border-bottom: 0.5px solid #D4CBAF;
-    }
-    .skill-name { color: #2C2A22; }
-    .skill-level { color: #9A9278; }
-
-    /* FOOTER */
-    footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11px;
-      color: #9A9278;
-      padding-top: 1.5rem;
-      border-top: 0.5px solid #D4CBAF;
-    }
-    footer a { color: #7A7560; text-decoration: none; }
-    footer a:hover { color: #4A5A2A; }
-    .footer-links { display: flex; gap: 1.5rem; }
-    .avail { display: flex; align-items: center; gap: 6px; }
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #6B7A3A;
-      display: inline-block;
-    }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-
-    <nav>
-      <a href="/">JW</a>
-      <div class="nav-links">
-        <a href="/design">design</a>
-        <a href="/code">code</a>
-        <a href="/about">about</a>
-        <a href="/contact">contact</a>
-      </div>
-    </nav>
-
-    <div class="hero">
-      <h1>Julia Wojacka —<br><em>designer & developer</em></h1>
-      <p>Product & Industrial designer with an eye for detail and a love for creative technologies. BA from Central Saint Martins, now studying MSc Applied Machine Learning for Creatives at the Creative Computing Institute. Born in Germany, raised in Poland, working across physical objects and data tools.</p>
-    </div>
-
-    <hr>
-
-    <p class="label">Selected work</p>
-    <div class="grid">
-      <a href="/design" class="card">
-        <p class="card-tag">PRODUCT DESIGN — WEARABLE TECH</p>
-        <h2>Inertia</h2>
-        <p>A flexible wearable sensor that helps volleyball beginners build confidence through real-time movement feedback. Designed for comfort, discretion, and inclusion.</p>
-        <span class="card-arrow">view case study →</span>
-      </a>
-      <a href="/design" class="card">
-        <p class="card-tag">INDUSTRIAL DESIGN — SPECULATIVE</p>
-        <h2>NutriPrint</h2>
-        <p>A 3D food dispenser using molecular gastronomy to deliver personalised, nutrient-rich meals affordably. Designed for public spaces in a near-future sustainable food system.</p>
-        <span class="card-arrow">view case study →</span>
-      </a>
-      <a href="/design" class="card">
-        <p class="card-tag">PRODUCT DESIGN — BROMPTON BRIEF</p>
-        <h2>Fluxor</h2>
-        <p>A self-defence flashlight integrated into a bike handlebar. Automatically activates when pulled, empowering women to cycle at night with confidence.</p>
-        <span class="card-arrow">view case study →</span>
-      </a>
-      <a href="/code" class="card">
-        <p class="card-tag">CODE — ML / DATA / GAMES</p>
-        <h2>Coding projects</h2>
-        <p>Scripts, data tools, and games built across Python and ML. From the Udemy 100 Days of Code to applied machine learning experiments.</p>
-        <span class="card-arrow">view on github →</span>
-      </a>
-    </div>
-
-    <hr>
-
-    <div class="about">
-      <div>
-        <p class="label">About</p>
-        <p class="about-text">I'm a designer and developer fascinated by how things are made — and the relationships between creative engineering, form, and aesthetics. I've interned at Dentsu Creative and Bozart interior studio, and I play volleyball for West London Hitters.<br><br>Outside of work: photography, snowboarding, and volleyball.</p>
-      </div>
-      <div>
-        <p class="label">Skills</p>
-        <div class="skills">
-          <div class="skill-row"><span class="skill-name">Rhino / Blender</span><span class="skill-level">advanced</span></div>
-          <div class="skill-row"><span class="skill-name">Illustrator / Photoshop</span><span class="skill-level">advanced</span></div>
-          <div class="skill-row"><span class="skill-name">Python / ML</span><span class="skill-level">intermediate</span></div>
-          <div class="skill-row"><span class="skill-name">Keyshot</span><span class="skill-level">intermediate</span></div>
-          <div class="skill-row"><span class="skill-name">English / Polish</span><span class="skill-level">fluent</span></div>
-          <div class="skill-row"><span class="skill-name">German / Japanese</span><span class="skill-level">learning</span></div>
-        </div>
-      </div>
-    </div>
-
-    <footer>
-      <div class="avail"><span class="dot"></span><span>Available for work</span></div>
-      <div class="footer-links">
-        <a href="#">GitHub</a>
-        <a href="#">LinkedIn</a>
-        <a href="#">Email</a>
-      </div>
-    </footer>
-
+<div class="about" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 4rem;">
+  <div>
+    <p class="label">About</p>
+    <p style="font-size: 13px; color: #6B6850; line-height: 1.9;">I'm a designer and developer fascinated by how things are made — and the relationships between creative engineering, form, and aesthetics. I've interned at Dentsu Creative and Bozart interior studio, and I play volleyball for West London Hitters.<br><br>Outside of work: photography, snowboarding, and volleyball.</p>
   </div>
-</body>
-</html>
+  <div>
+    <p class="label">Skills</p>
+    <div style="display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 0.5rem 0; border-bottom: 0.5px solid #D4CBAF;"><span>Rhino / Blender</span><span style="color: #9A9278;">advanced</span></div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 0.5rem 0; border-bottom: 0.5px solid #D4CBAF;"><span>Illustrator / Photoshop</span><span style="color: #9A9278;">advanced</span></div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 0.5rem 0; border-bottom: 0.5px solid #D4CBAF;"><span>Python / ML</span><span style="color: #9A9278;">intermediate</span></div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 0.5rem 0; border-bottom: 0.5px solid #D4CBAF;"><span>Keyshot</span><span style="color: #9A9278;">intermediate</span></div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 0.5rem 0; border-bottom: 0.5px solid #D4CBAF;"><span>English / Polish</span><span style="color: #9A9278;">fluent</span></div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 0.5rem 0; border-bottom: 0.5px solid #D4CBAF;"><span>German / Japanese</span><span style="color: #9A9278;">learning</span></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

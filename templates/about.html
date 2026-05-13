@@ -1,42 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — Julia Wojacka</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'DM Mono', monospace; background: #F5F0E8; color: #2C2A22; min-height: 100vh; }
-    .wrap { max-width: 1400px; margin: 0 auto; padding: 2.5rem 4rem 3rem; }
-    nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5rem; font-size: 12px; letter-spacing: 0.08em; color: #7A7560; }
-    nav a { color: #7A7560; text-decoration: none; }
-    nav a:hover { color: #4A5A2A; }
-    .nav-links { display: flex; gap: 2rem; }
-    h1 { font-family: 'DM Serif Display', serif; font-size: 72px; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 2rem; }
-    p { font-size: 13px; color: #6B6850; line-height: 1.8; }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <nav>
-      <a href="/">HOME</a>
-      <div class="nav-links">
-        <a href="/design">design</a>
-        <a href="/code">code</a>
-        <a href="/about">about</a>
-        <a href="/contact">contact</a>
-      </div>
-    </nav>
-    <h1>About</h1>
-    <p>I’m Julia, an Applied Machine Learning student at UAL’s Creative Computing Institute (CCI), with a background in Product Design at Central Saint Martins. My practice sits at the intersection of design, computation, and emerging AI systems, with a focus on how technology can meaningfully shape creative processes and experiences.
+{% extends "base.html" %}
+{% block title %}About — Julia Wojacka{% endblock %}
 
-I’m particularly interested in generative systems, human–AI interaction, and the development of tools that expand how we design, think, and create across digital and physical environments. I approach my work through both a design and technical lens, combining coding, prototyping, and research-led experimentation.
+{% block content %}
+<div style="margin-bottom: 3rem;">
+  <h1>About —<br><em>Julia Wojacka</em></h1>
+</div>
 
-My background in product design at CSM has shaped a strong foundation in human-centred thinking, material exploration, and conceptual development, which I now translate into computational and machine learning contexts. I’m drawn to projects that explore new creative workflows and challenge conventional boundaries between disciplines.
+<hr>
 
-Alongside my studies, I enjoy building, experimenting with new technologies, and exploring ideas through hands-on making and iterative design.</p>
+<div class="about" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 4rem;">
+  <div>
+    <p class="label">Bio</p>
+    <p style="font-size: 13px; color: #6B6850; line-height: 1.9;">I'm a designer and developer fascinated by how things are made — and the relationships between creative engineering, form, and aesthetics.<br><br>I have a BA in Product and Industrial Design from Central Saint Martins, and I'm currently studying MSc Applied Machine Learning for Creatives at UAL's Creative Computing Institute.<br><br>I've interned at Dentsu Creative, working on campaigns for Audi and Duplo, and at Bozart interior design studio, creating interior plans and custom furniture.<br><br>Outside of work: volleyball for West London Hitters, photography, snowboarding, and piano.</p>
   </div>
-</body>
-</html>
+  <div>
+    <p class="label">Experience</p>
+    <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+      <div>
+        <p style="font-size: 11px; color: #6B7A3A; letter-spacing: 0.08em;">AUG–SEP 2023</p>
+        <p style="font-size: 13px; font-weight: 400; margin: 0.25rem 0;">Dentsu Creative</p>
+        <p style="font-size: 12px; color: #6B6850;">Creative internship — Audi, Duplo</p>
+      </div>
+      <div>
+        <p style="font-size: 11px; color: #6B7A3A; letter-spacing: 0.08em;">JUL–AUG 2022</p>
+        <p style="font-size: 13px; font-weight: 400; margin: 0.25rem 0;">Bozart</p>
+        <p style="font-size: 12px; color: #6B6850;">Interior design studio</p>
+      </div>
+    </div>
+
+    <p class="label">Education</p>
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div>
+        <p style="font-size: 11px; color: #6B7A3A; letter-spacing: 0.08em;">2025–2026</p>
+        <p style="font-size: 13px; margin: 0.25rem 0;">UAL Creative Computing Institute</p>
+        <p style="font-size: 12px; color: #6B6850;">MSc Applied Machine Learning for Creatives</p>
+      </div>
+      <div>
+        <p style="font-size: 11px; color: #6B7A3A; letter-spacing: 0.08em;">2022–2025</p>
+        <p style="font-size: 13px; margin: 0.25rem 0;">Central Saint Martins</p>
+        <p style="font-size: 12px; color: #6B6850;">BA Product and Industrial Design</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
