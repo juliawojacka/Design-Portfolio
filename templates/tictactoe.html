@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe — Julia Wojacka</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Mono', monospace; background: #F5F0E8; color: #2C2A22; min-height: 100vh; }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 2.5rem 4rem 3rem; }
+    nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5rem; font-size: 12px; letter-spacing: 0.08em; color: #7A7560; }
+    nav a { color: #7A7560; text-decoration: none; }
+    nav a:hover { color: #4A5A2A; }
+    .nav-links { display: flex; gap: 2rem; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: 48px; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    .subtitle { font-size: 12px; color: #9A9278; margin-bottom: 3rem; }
+    .game-wrap { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+    .status { font-size: 13px; color: #6B6850; height: 20px; letter-spacing: 0.05em; }
+    .board { display: grid; grid-template-columns: repeat(3, 120px); grid-template-rows: repeat(3, 120px); gap: 1px; background: #D4CBAF; border: 0.5px solid #D4CBAF; border-radius: 12px; overflow: hidden; }
+    .cell { background: #F5F0E8; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 48px; cursor: pointer; transition: background 0.15s; user-select: none; }
+    .cell:hover { background: #EDE6D6; }
+    .cell.x { color: #2C2A22; }
+    .cell.o { color: #6B7A3A; }
+    .cell.win { background: #E8E0CC; }
+    .btn { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #7A7560; background: none; border: 0.5px solid #D4CBAF; padding: 0.6rem 1.5rem; cursor: pointer; border-radius: 4px; transition: all 0.15s; }
+    .btn:hover { background: #EDE6D6; color: #4A5A2A; border-color: #6B7A3A; }
+    .score { display: flex; gap: 3rem; font-size: 12px; color: #9A9278; }
+    .score-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .score-num { font-family: 'DM Serif Display', serif; font-size: 32px; color: #2C2A22; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <a href="/">JW</a>
+      <div class="nav-links">
+        <a href="/design">design</a>
+        <a href="/code">code</a>
+        <a href="/about">about</a>
+        <a href="/contact">contact</a>
+      </div>
+    </nav>
+
+    <h1>Tic Tac Toe</h1>
+    <p class="subtitle">a silly little game</p>
+
+    <div class="game-wrap">
+      <div class="score">
+        <div class="score-item">
+          <span class="score-num" id="scoreX">0</span>
+          <span>you (X)</span>
+        </div>
+        <div class="score-item">
+          <span class="score-num" id="scoreDraw">0</span>
+          <span>draws</span>
+        </div>
+        <div class="score-item">
+          <span class="score-num" id="scoreO">0</span>
+          <span>computer (O)</span>
+        </div>
+      </div>
+
+      <div class="status" id="status">your turn</div>
+
+      <div class="board" id="board">
+        <div class="cell" onclick="handleClick(0)"></div>
+        <div class="cell" onclick="handleClick(1)"></div>
+        <div class="cell" onclick="handleClick(2)"></div>
+        <div class="cell" onclick="handleClick(3)"></div>
+        <div class="cell" onclick="handleClick(4)"></div>
+        <div class="cell" onclick="handleClick(5)"></div>
+        <div class="cell" onclick="handleClick(6)"></div>
+        <div class="cell" onclick="handleClick(7)"></div>
+        <div class="cell" onclick="handleClick(8)"></div>
+      </div>
+
+      <button class="btn" onclick="resetGame()">new game</button>
+    </div>
+  </div>
+
+  <script>
+    let board = ['', '', '', '', '', '', '', '', ''];
+    let gameOver = false;
+    let scores = { X: 0, O: 0, draw: 0 };
+
+    const wins = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    function handleClick(i) {
+      if (board[i] || gameOver) return;
+      board[i] = 'X';
+      render();
+      const result = checkWinner();
+      if (result) return endGame(result);
+      setTimeout(computerMove, 400);
+    }
+
+    function computerMove() {
+      if (gameOver) return;
+      document.getElementById('status').textContent = 'thinking...';
+      const move = getBestMove();
+      board[move] = 'O';
+      render();
+      const result = checkWinner();
+      if (result) return endGame(result);
+      document.getElementById('status').textContent = 'your turn';
+    }
+
+    function getBestMove() {
+      for (let i = 0; i < 9; i++) {
+        if (!board[i]) {
+          board[i] = 'O';
+          if (checkWinner() === 'O') { board[i] = ''; return i; }
+          board[i] = '';
+        }
+      }
+      for (let i = 0; i < 9; i++) {
+        if (!board[i]) {
+          board[i] = 'X';
+          if (checkWinner() === 'X') { board[i] = ''; return i; }
+          board[i] = '';
+        }
+      }
+      if (!board[4]) return 4;
+      const corners = [0,2,6,8].filter(i => !board[i]);
+      if (corners.length) return corners[Math.floor(Math.random() * corners.length)];
+      const available = board.map((v,i) => v ? null : i).filter(v => v !== null);
+      return available[Math.floor(Math.random() * available.length)];
+    }
+
+    function checkWinner() {
+      for (const [a,b,c] of wins) {
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) return board[a];
+      }
+      if (board.every(v => v)) return 'draw';
+      return null;
+    }
+
+    function endGame(result) {
+      gameOver = true;
+      const cells = document.querySelectorAll('.cell');
+      if (result === 'draw') {
+        scores.draw++;
+        document.getElementById('status').textContent = "it's a draw!";
+      } else {
+        scores[result]++;
+        for (const [a,b,c] of wins) {
+          if (board[a] === result && board[b] === result && board[c] === result) {
+            cells[a].classList.add('win');
+            cells[b].classList.add('win');
+            cells[c].classList.add('win');
+          }
+        }
+        document.getElementById('status').textContent = result === 'X' ? 'you win! 🎉' : 'computer wins!';
+      }
+      document.getElementById('scoreX').textContent = scores.X;
+      document.getElementById('scoreO').textContent = scores.O;
+      document.getElementById('scoreDraw').textContent = scores.draw;
+    }
+
+    function render() {
+      const cells = document.querySelectorAll('.cell');
+      board.forEach((val, i) => {
+        cells[i].textContent = val;
+        cells[i].className = 'cell' + (val ? ' ' + val.toLowerCase() : '');
+        cells[i].onclick = val ? null : () => handleClick(i);
+      });
+    }
+
+    function resetGame() {
+      board = ['', '', '', '', '', '', '', '', ''];
+      gameOver = false;
+      render();
+      document.getElementById('status').textContent = 'your turn';
+    }
+  </script>
+</body>
+</html>
