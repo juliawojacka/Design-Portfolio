@@ -1,26 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Borderless — Julia Wojacka{% endblock %}
 
-{% block extra_styles %}
-  .borderless-wrap { display: flex; flex-direction: column; align-items: center; gap: 2rem; margin-top: 2rem; }
-  .canvas-container { position: relative; border: 0.5px solid #D4CBAF; border-radius: 12px; overflow: hidden; cursor: crosshair; }
-  canvas { display: block; background: #FFFFFF; }
-  .toolbar { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
-  .color-options { display: flex; gap: 0.5rem; align-items: center; }
-  .color-swatch { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
-  .color-swatch:hover { transform: scale(1.15); }
-  .color-swatch.active { border-color: #6B7A3A; }
-  .color-picker-wrap { display: flex; align-items: center; gap: 0.5rem; font-size: 11px; color: #9A9278; letter-spacing: 0.08em; }
-  input[type="color"] { width: 24px; height: 24px; border: none; border-radius: 50%; cursor: pointer; background: none; padding: 0; }
-  .size-wrap { display: flex; align-items: center; gap: 0.5rem; font-size: 11px; color: #9A9278; letter-spacing: 0.08em; }
-  input[type="range"] { width: 80px; accent-color: #6B7A3A; }
-  .divider-v { width: 0.5px; height: 24px; background: #D4CBAF; }
-  .btn { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #7A7560; background: none; border: 0.5px solid #D4CBAF; padding: 0.6rem 1.5rem; cursor: pointer; border-radius: 4px; transition: all 0.15s; }
-  .btn:hover { background: #EDE6D6; color: #4A5A2A; border-color: #6B7A3A; }
-  .btn.primary { background: #6B7A3A; color: #F5F0E8; border-color: #6B7A3A; }
-  .btn.primary:hover { background: #4A5A2A; }
-  .btn-row { display: flex; gap: 1rem; }
-  .eraser-icon { font-size: 14px; }
 {% endblock %}
 
 {% block content %}
