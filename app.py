@@ -26,5 +26,9 @@ def contact():
 def tictactoe():
     return render_template("tictactoe.html")
 
+@app.route("/borderless")
+def borderless():
+    return render_template("borderless.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
