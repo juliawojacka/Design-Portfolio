@@ -65,6 +65,17 @@
     </div>
   </div>
 
+  <!-- BORDERLESS CARD -->
+  <a href="/borderless" class="card" style="grid-column: span 4;">
+    <p class="card-tag">PROJECT — SKETCH TO IMAGE</p>
+    <h2>Borderless</h2>
+    <p>
+      A sketch pad that feeds drawings into an AI image generation pipeline.
+      Draw, colour, and send.
+    </p>
+    <span class="card-arrow">open sketch pad →</span>
+  </a>
+
 </div>
 
 <!-- ================= CSS ================= -->
@@ -227,19 +238,19 @@ function endGame(result) {
   } else {
     scores[result]++;
 
-  const winLine = wins.find(([a, b, c]) =>
-    board[a] &&
-    board[a] === board[b] &&
-    board[a] === board[c] &&
-    board[a] === result
-  );
+    const winLine = wins.find(([a, b, c]) =>
+      board[a] &&
+      board[a] === board[b] &&
+      board[a] === board[c] &&
+      board[a] === result
+    );
 
-  if (winLine) {
-    const [a, b, c] = winLine;
-    cells[a].classList.add('win');
-    cells[b].classList.add('win');
-    cells[c].classList.add('win');
-  }
+    if (winLine) {
+      const [a, b, c] = winLine;
+      cells[a].classList.add('win');
+      cells[b].classList.add('win');
+      cells[c].classList.add('win');
+    }
 
     document.getElementById('status').textContent =
       result === 'X' ? 'you win!' : 'computer wins!';
