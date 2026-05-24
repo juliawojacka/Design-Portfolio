@@ -39,16 +39,30 @@
     transition: all 0.15s;
   }
   .color-swatch:hover { transform: scale(1.2); }
-  .color-swatch.active { border-color: #6B7A3A; }
+  .color-swatch.active { border-color: #2C2A22; }
 
-  input[type="color"] {
+  .custom-swatch {
     width: 18px;
     height: 18px;
-    border: 1.5px solid #D4CBAF;
     border-radius: 50%;
     cursor: pointer;
-    background: none;
+    border: 1.5px solid transparent;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .custom-swatch:hover { transform: scale(1.2); }
+  .custom-swatch.active { border-color: #2C2A22; }
+  .custom-swatch input[type="color"] {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 26px;
+    height: 26px;
+    border: none;
     padding: 0;
+    cursor: pointer;
+    opacity: 0;
   }
 
   .size-track {
@@ -77,7 +91,6 @@
   }
 
   .size-label { font-size: 11px; color: #9A9278; min-width: 24px; }
-
   .divider-v { width: 0.5px; height: 20px; background: #D4CBAF; }
 
   .tool-btn {
@@ -129,14 +142,21 @@
     <div class="toolbar-group">
       <span class="toolbar-label">colour</span>
       <div class="color-options">
-        <div class="color-swatch active" style="background:#2C2A22;" onclick="setColor('#2C2A22', this)"></div>
-        <div class="color-swatch" style="background:#6B7A3A;" onclick="setColor('#6B7A3A', this)"></div>
-        <div class="color-swatch" style="background:#C0392B;" onclick="setColor('#C0392B', this)"></div>
-        <div class="color-swatch" style="background:#2980B9;" onclick="setColor('#2980B9', this)"></div>
-        <div class="color-swatch" style="background:#E67E22;" onclick="setColor('#E67E22', this)"></div>
-        <div class="color-swatch" style="background:#8E44AD;" onclick="setColor('#8E44AD', this)"></div>
-        <div class="color-swatch" style="background:#F5F0E8; border-color: #D4CBAF;" onclick="setColor('#F5F0E8', this)"></div>
-        <input type="color" id="customColor" value="#2C2A22" oninput="setCustomColor(this.value)" title="custom colour">
+        <!-- muted rainbow + black + white -->
+        <div class="color-swatch active" style="background:#2C2A22;" onclick="setColor('#2C2A22', this)" title="black"></div>
+        <div class="color-swatch" style="background:#A85C52;" onclick="setColor('#A85C52', this)" title="red"></div>
+        <div class="color-swatch" style="background:#B8834A;" onclick="setColor('#B8834A', this)" title="orange"></div>
+        <div class="color-swatch" style="background:#B8A84A;" onclick="setColor('#B8A84A', this)" title="yellow"></div>
+        <div class="color-swatch" style="background:#6B7A3A;" onclick="setColor('#6B7A3A', this)" title="green"></div>
+        <div class="color-swatch" style="background:#4A7A6B;" onclick="setColor('#4A7A6B', this)" title="teal"></div>
+        <div class="color-swatch" style="background:#4A5E7A;" onclick="setColor('#4A5E7A', this)" title="blue"></div>
+        <div class="color-swatch" style="background:#6B4A7A;" onclick="setColor('#6B4A7A', this)" title="purple"></div>
+        <div class="color-swatch" style="background:#A85C7A;" onclick="setColor('#A85C7A', this)" title="pink"></div>
+        <div class="color-swatch" style="background:#F5F0E8; border-color: #D4CBAF;" onclick="setColor('#F5F0E8', this)" title="white"></div>
+        <!-- custom colour picker hidden behind pink swatch -->
+        <div class="custom-swatch" id="customSwatch" style="background:#C4788A;" title="custom colour">
+          <input type="color" id="customColor" value="#C4788A" oninput="setCustomColor(this.value)">
+        </div>
       </div>
     </div>
 
@@ -238,6 +258,7 @@
     currentColor = color;
     erasing = false;
     document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    document.getElementById('customSwatch').classList.remove('active');
     el.classList.add('active');
     document.getElementById('eraserBtn').classList.remove('active');
   }
@@ -246,6 +267,9 @@
     currentColor = color;
     erasing = false;
     document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    const swatch = document.getElementById('customSwatch');
+    swatch.style.background = color;
+    swatch.classList.add('active');
     document.getElementById('eraserBtn').classList.remove('active');
   }
 
@@ -258,6 +282,7 @@
     erasing = !erasing;
     document.getElementById('eraserBtn').classList.toggle('active', erasing);
     document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    document.getElementById('customSwatch').classList.remove('active');
   }
 
   function clearCanvas() {
