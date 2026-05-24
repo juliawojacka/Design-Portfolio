@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% block title %}Borderless — Julia Wojacka{% endblock %}
+
+{% block extra_styles %}
+  .borderless-wrap { display: flex; flex-direction: column; align-items: center; gap: 2rem; margin-top: 2rem; }
+  .canvas-container { border: 0.5px solid #D4CBAF; border-radius: 12px; overflow: hidden; cursor: crosshair; }
+  canvas { display: block; background: #FFFFFF; }
+
+  .toolbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border: 0.5px solid #D4CBAF;
+    border-radius: 12px;
+    background: #F5F0E8;
+  }
+
+  .toolbar-group { display: flex; align-items: center; gap: 0.75rem; }
+
+  .toolbar-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: #9A9278;
+    text-transform: uppercase;
+  }
+
+  .color-options { display: flex; gap: 0.4rem; align-items: center; }
+
+  .color-swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.15s;
+  }
+  .color-swatch:hover { transform: scale(1.2); }
+  .color-swatch.active { border-color: #6B7A3A; }
+
+  input[type="color"] {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #D4CBAF;
+    border-radius: 50%;
+    cursor: pointer;
+    background: none;
+    padding: 0;
+  }
+
+  .size-track {
+    -webkit-appearance: none;
+    width: 80px;
+    height: 1px;
+    background: #D4CBAF;
+    outline: none;
+    border-radius: 1px;
+  }
+  .size-track::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #6B7A3A;
+    cursor: pointer;
+  }
+  .size-track::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #6B7A3A;
+    cursor: pointer;
+    border: none;
+  }
+
+  .size-label { font-size: 11px; color: #9A9278; min-width: 24px; }
+
+  .divider-v { width: 0.5px; height: 20px; background: #D4CBAF; }
+
+  .tool-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #7A7560;
+    background: none;
+    border: 0.5px solid #D4CBAF;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .tool-btn:hover { background: #EDE6D6; color: #4A5A2A; border-color: #B8B09A; }
+  .tool-btn.active { background: #EDE6D6; color: #4A5A2A; border-color: #6B7A3A; }
+
+  .save-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #F5F0E8;
+    background: #6B7A3A;
+    border: 0.5px solid #6B7A3A;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .save-btn:hover { background: #4A5A2A; border-color: #4A5A2A; }
+
+  @media (max-width: 600px) {
+    .toolbar { gap: 1rem; }
+    .size-track { width: 60px; }
+  }
+{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+  <h1>Borderless —<br><em>sketch to image</em></h1>
+  <p style="font-size: 13px; color: #6B6850; line-height: 1.8; max-width: 500px;">Draw a sketch below and hit save to export it as a PNG for the image generation pipeline.</p>
+</div>
+
+<hr>
+
+<div class="borderless-wrap">
+
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <span class="toolbar-label">colour</span>
+      <div class="color-options">
+        <div class="color-swatch active" style="background:#2C2A22;" onclick="setColor('#2C2A22', this)"></div>
+        <div class="color-swatch" style="background:#6B7A3A;" onclick="setColor('#6B7A3A', this)"></div>
+        <div class="color-swatch" style="background:#C0392B;" onclick="setColor('#C0392B', this)"></div>
+        <div class="color-swatch" style="background:#2980B9;" onclick="setColor('#2980B9', this)"></div>
+        <div class="color-swatch" style="background:#E67E22;" onclick="setColor('#E67E22', this)"></div>
+        <div class="color-swatch" style="background:#8E44AD;" onclick="setColor('#8E44AD', this)"></div>
+        <div class="color-swatch" style="background:#F5F0E8; border-color: #D4CBAF;" onclick="setColor('#F5F0E8', this)"></div>
+        <input type="color" id="customColor" value="#2C2A22" oninput="setCustomColor(this.value)" title="custom colour">
+      </div>
+    </div>
+
+    <div class="divider-v"></div>
+
+    <div class="toolbar-group">
+      <span class="toolbar-label">size</span>
+      <input type="range" class="size-track" id="brushSize" min="1" max="40" value="4" oninput="updateSize(this.value)">
+      <span class="size-label" id="sizeLabel">4px</span>
+    </div>
+
+    <div class="divider-v"></div>
+
+    <div class="toolbar-group">
+      <button class="tool-btn" id="eraserBtn" onclick="toggleEraser()">eraser</button>
+      <button class="tool-btn" onclick="clearCanvas()">clear</button>
+    </div>
+
+    <div class="divider-v"></div>
+
+    <button class="save-btn" onclick="saveCanvas()">save as png ↓</button>
+  </div>
+
+  <div class="canvas-container">
+    <canvas id="sketchCanvas" width="800" height="500"></canvas>
+  </div>
+
+</div>
+
+<script>
+  const canvas = document.getElementById('sketchCanvas');
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  let drawing = false;
+  let currentColor = '#2C2A22';
+  let brushSize = 4;
+  let erasing = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    if (e.touches) {
+      return {
+        x: (e.touches[0].clientX - rect.left) * scaleX,
+        y: (e.touches[0].clientY - rect.top) * scaleY
+      };
+    }
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
+    };
+  }
+
+  function startDraw(e) {
+    e.preventDefault();
+    drawing = true;
+    const pos = getPos(e);
+    lastX = pos.x;
+    lastY = pos.y;
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, (erasing ? brushSize * 3 : brushSize) / 2, 0, Math.PI * 2);
+    ctx.fillStyle = erasing ? '#FFFFFF' : currentColor;
+    ctx.fill();
+  }
+
+  function draw(e) {
+    e.preventDefault();
+    if (!drawing) return;
+    const pos = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.strokeStyle = erasing ? '#FFFFFF' : currentColor;
+    ctx.lineWidth = erasing ? brushSize * 3 : brushSize;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+    lastX = pos.x;
+    lastY = pos.y;
+  }
+
+  function stopDraw() { drawing = false; }
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDraw);
+  canvas.addEventListener('mouseleave', stopDraw);
+  canvas.addEventListener('touchstart', startDraw, { passive: false });
+  canvas.addEventListener('touchmove', draw, { passive: false });
+  canvas.addEventListener('touchend', stopDraw);
+
+  function setColor(color, el) {
+    currentColor = color;
+    erasing = false;
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('eraserBtn').classList.remove('active');
+  }
+
+  function setCustomColor(color) {
+    currentColor = color;
+    erasing = false;
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    document.getElementById('eraserBtn').classList.remove('active');
+  }
+
+  function updateSize(val) {
+    brushSize = parseInt(val);
+    document.getElementById('sizeLabel').textContent = val + 'px';
+  }
+
+  function toggleEraser() {
+    erasing = !erasing;
+    document.getElementById('eraserBtn').classList.toggle('active', erasing);
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+  }
+
+  function clearCanvas() {
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function saveCanvas() {
+    const link = document.createElement('a');
+    link.download = 'borderless-sketch.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  function resizeCanvas() {
+    const maxWidth = Math.min(800, window.innerWidth - 64);
+    canvas.style.width = maxWidth + 'px';
+    canvas.style.height = (maxWidth * 500 / 800) + 'px';
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+</script>
+{% endblock %}

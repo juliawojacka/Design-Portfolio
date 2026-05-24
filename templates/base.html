@@ -175,15 +175,16 @@
       .grid { grid-template-columns: 1fr; }
       footer { flex-direction: column; gap: 1rem; text-align: center; }
     }
+
+    {% block extra_styles %}{% endblock %}
   </style>
 
-  {% block extra_styles %}{% endblock %}
 </head>
 
 <body>
   <div class="wrap">
     <nav>
-      <a href="/">home</a>
+      <a href="/">JW</a>
       <div class="nav-links">
         <a href="/design">design</a>
         <a href="/code">code</a>

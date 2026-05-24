@@ -24,11 +24,11 @@ def contact():
     
 @app.route("/tictactoe")
 def tictactoe():
-    return render_template("tictactoe.html")
+    return render_template("code/tictactoe.html")
 
 @app.route("/borderless")
 def borderless():
-    return render_template("borderless.html")
+    return render_template("code/borderless.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
