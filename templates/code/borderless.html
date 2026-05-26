@@ -19,8 +19,19 @@
     background: #F5F0E8;
   }
 
-  .toolbar-group { display: flex; align-items: center; gap: 0.75rem; }
+  .category-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 1rem 1.25rem;
+    border: 0.5px solid #D4CBAF;
+    border-radius: 12px;
+    background: #F5F0E8;
+  }
 
+  .toolbar-group { display: flex; align-items: center; gap: 0.75rem; }
   .toolbar-label {
     font-size: 10px;
     letter-spacing: 0.1em;
@@ -29,7 +40,6 @@
   }
 
   .color-options { display: flex; gap: 0.4rem; align-items: center; }
-
   .color-swatch {
     width: 18px;
     height: 18px;
@@ -108,6 +118,21 @@
   .tool-btn:hover { background: #EDE6D6; color: #4A5A2A; border-color: #B8B09A; }
   .tool-btn.active { background: #EDE6D6; color: #4A5A2A; border-color: #6B7A3A; }
 
+  .category-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #7A7560;
+    background: none;
+    border: 0.5px solid #D4CBAF;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .category-btn:hover { background: #EDE6D6; color: #4A5A2A; border-color: #B8B09A; }
+  .category-btn.active { background: #6B7A3A; color: #F5F0E8; border-color: #6B7A3A; }
+
   .save-btn {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -121,28 +146,42 @@
     transition: all 0.15s;
   }
   .save-btn:hover { background: #4A5A2A; border-color: #4A5A2A; }
+  .save-btn:disabled { background: #D4CBAF; border-color: #D4CBAF; cursor: not-allowed; }
+
+  .category-hint { font-size: 11px; color: #C0B89A; letter-spacing: 0.05em; }
 
   @media (max-width: 600px) {
     .toolbar { gap: 1rem; }
     .size-track { width: 60px; }
+    .category-bar { gap: 0.5rem; }
   }
 {% endblock %}
 
 {% block content %}
 <div style="margin-bottom: 2rem;">
   <h1>Borderless —<br><em>sketch to image</em></h1>
-  <p style="font-size: 13px; color: #6B6850; line-height: 1.8; max-width: 500px;">Draw a sketch below and hit save to export it as a PNG for the image generation pipeline.</p>
+  <p style="font-size: 13px; color: #6B6850; line-height: 1.8; max-width: 500px;">A drawing tool that turns simple sketches into 3D environments. Plants, trees, mountains, planets — anything you draw becomes part of the world.</p>
 </div>
 
 <hr>
 
 <div class="borderless-wrap">
 
+  <div class="category-bar">
+    <span class="toolbar-label">category</span>
+    <button class="category-btn" onclick="setCategory('mushroom', this)">mushroom</button>
+    <button class="category-btn" onclick="setCategory('flower', this)">flower</button>
+    <button class="category-btn" onclick="setCategory('tree', this)">tree</button>
+    <button class="category-btn" onclick="setCategory('mountain', this)">mountain</button>
+    <button class="category-btn" onclick="setCategory('cloud', this)">cloud</button>
+    <button class="category-btn" onclick="setCategory('planet', this)">planet</button>
+    <span class="category-hint" id="categoryHint">— select a category before saving</span>
+  </div>
+
   <div class="toolbar">
     <div class="toolbar-group">
       <span class="toolbar-label">colour</span>
       <div class="color-options">
-        <!-- muted rainbow + black + white -->
         <div class="color-swatch active" style="background:#2C2A22;" onclick="setColor('#2C2A22', this)" title="black"></div>
         <div class="color-swatch" style="background:#A85C52;" onclick="setColor('#A85C52', this)" title="red"></div>
         <div class="color-swatch" style="background:#B8834A;" onclick="setColor('#B8834A', this)" title="orange"></div>
@@ -150,7 +189,6 @@
         <div class="color-swatch" style="background:#6B7A3A;" onclick="setColor('#6B7A3A', this)" title="green"></div>
         <div class="color-swatch" style="background:#4A5E7A;" onclick="setColor('#4A5E7A', this)" title="blue"></div>
         <div class="color-swatch" style="background:#6B4A7A;" onclick="setColor('#6B4A7A', this)" title="purple"></div>
-        <!-- custom colour picker hidden behind pink swatch -->
         <div class="custom-swatch" id="customSwatch" style="background:#C4788A;" title="custom colour">
           <input type="color" id="customColor" value="#C4788A" oninput="setCustomColor(this.value)">
         </div>
@@ -174,7 +212,7 @@
 
     <div class="divider-v"></div>
 
-    <button class="save-btn" onclick="saveCanvas()">save as png ↓</button>
+    <button class="save-btn" id="saveBtn" onclick="saveCanvas()" disabled>save as png ↓</button>
   </div>
 
   <div class="canvas-container">
@@ -196,6 +234,7 @@
   let erasing = false;
   let lastX = 0;
   let lastY = 0;
+  let selectedCategory = null;
 
   function getPos(e) {
     const rect = canvas.getBoundingClientRect();
@@ -251,6 +290,14 @@
   canvas.addEventListener('touchmove', draw, { passive: false });
   canvas.addEventListener('touchend', stopDraw);
 
+  function setCategory(cat, el) {
+    selectedCategory = cat;
+    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('categoryHint').textContent = '— ' + cat + ' selected';
+    document.getElementById('saveBtn').disabled = false;
+  }
+
   function setColor(color, el) {
     currentColor = color;
     erasing = false;
@@ -288,8 +335,11 @@
   }
 
   function saveCanvas() {
+    if (!selectedCategory) return;
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const filename = selectedCategory.toUpperCase() + '-' + timestamp + '.png';
     const link = document.createElement('a');
-    link.download = 'borderless-sketch.png';
+    link.download = filename;
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
