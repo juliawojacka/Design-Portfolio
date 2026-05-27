@@ -50,30 +50,8 @@
   }
   .color-swatch:hover { transform: scale(1.2); }
   .color-swatch.active { border-color: #2C2A22; }
-
-  .custom-swatch {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 1.5px solid transparent;
-    transition: all 0.15s;
-    position: relative;
-    overflow: hidden;
-  }
-  .custom-swatch:hover { transform: scale(1.2); }
-  .custom-swatch.active { border-color: #2C2A22; }
-  .custom-swatch input[type="color"] {
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    width: 26px;
-    height: 26px;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    opacity: 0;
-  }
+  .color-swatch.locked { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .color-swatch.locked.active { opacity: 1; }
 
   .size-track {
     -webkit-appearance: none;
@@ -148,7 +126,7 @@
   .save-btn:hover { background: #4A5A2A; border-color: #4A5A2A; }
   .save-btn:disabled { background: #D4CBAF; border-color: #D4CBAF; cursor: not-allowed; }
 
-  .category-hint { font-size: 11px; color: #C0B89A; letter-spacing: 0.05em; }
+  .hint { font-size: 11px; color: #C0B89A; letter-spacing: 0.05em; }
 
   @media (max-width: 600px) {
     .toolbar { gap: 1rem; }
@@ -175,24 +153,23 @@
     <button class="category-btn" onclick="setCategory('mountain', this)">mountain</button>
     <button class="category-btn" onclick="setCategory('cloud', this)">cloud</button>
     <button class="category-btn" onclick="setCategory('planet', this)">planet</button>
-    <span class="category-hint" id="categoryHint">— select a category before saving</span>
+    <span class="hint" id="categoryHint">— select a category before saving</span>
   </div>
 
   <div class="toolbar">
     <div class="toolbar-group">
       <span class="toolbar-label">colour</span>
-      <div class="color-options">
-        <div class="color-swatch active" style="background:#2C2A22;" onclick="setColor('#2C2A22', this)" title="black"></div>
-        <div class="color-swatch" style="background:#A85C52;" onclick="setColor('#A85C52', this)" title="red"></div>
-        <div class="color-swatch" style="background:#B8834A;" onclick="setColor('#B8834A', this)" title="orange"></div>
-        <div class="color-swatch" style="background:#B8A84A;" onclick="setColor('#B8A84A', this)" title="yellow"></div>
-        <div class="color-swatch" style="background:#6B7A3A;" onclick="setColor('#6B7A3A', this)" title="green"></div>
-        <div class="color-swatch" style="background:#4A5E7A;" onclick="setColor('#4A5E7A', this)" title="blue"></div>
-        <div class="color-swatch" style="background:#6B4A7A;" onclick="setColor('#6B4A7A', this)" title="purple"></div>
-        <div class="custom-swatch" id="customSwatch" style="background:#C4788A;" title="custom colour">
-          <input type="color" id="customColor" value="#C4788A" oninput="setCustomColor(this.value)">
-        </div>
+      <div class="color-options" id="colorOptions">
+        <div class="color-swatch active" style="background:#2C2A22;" onclick="setColor('#2C2A22', 'black', this)" title="black"></div>
+        <div class="color-swatch" style="background:#A85C52;" onclick="setColor('#A85C52', 'red', this)" title="red"></div>
+        <div class="color-swatch" style="background:#B8834A;" onclick="setColor('#B8834A', 'orange', this)" title="orange"></div>
+        <div class="color-swatch" style="background:#B8A84A;" onclick="setColor('#B8A84A', 'yellow', this)" title="yellow"></div>
+        <div class="color-swatch" style="background:#6B7A3A;" onclick="setColor('#6B7A3A', 'green', this)" title="green"></div>
+        <div class="color-swatch" style="background:#4A5E7A;" onclick="setColor('#4A5E7A', 'blue', this)" title="blue"></div>
+        <div class="color-swatch" style="background:#6B4A7A;" onclick="setColor('#6B4A7A', 'purple', this)" title="purple"></div>
+        <div class="color-swatch" style="background:#C4788A;" onclick="setColor('#C4788A', 'pink', this)" title="pink"></div>
       </div>
+      <span class="hint" id="colorHint"></span>
     </div>
 
     <div class="divider-v"></div>
@@ -230,11 +207,14 @@
 
   let drawing = false;
   let currentColor = '#2C2A22';
+  let currentColorName = 'black';
   let brushSize = 4;
   let erasing = false;
   let lastX = 0;
   let lastY = 0;
   let selectedCategory = null;
+  let colorLocked = false;
+  let hasDrawn = false;
 
   function getPos(e) {
     const rect = canvas.getBoundingClientRect();
@@ -254,6 +234,11 @@
 
   function startDraw(e) {
     e.preventDefault();
+    if (!colorLocked && !erasing) {
+      colorLocked = true;
+      lockSwatches();
+    }
+    hasDrawn = true;
     drawing = true;
     const pos = getPos(e);
     lastX = pos.x;
@@ -290,30 +275,29 @@
   canvas.addEventListener('touchmove', draw, { passive: false });
   canvas.addEventListener('touchend', stopDraw);
 
-  function setCategory(cat, el) {
-    selectedCategory = cat;
-    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('categoryHint').textContent = '— ' + cat + ' selected';
-    document.getElementById('saveBtn').disabled = false;
+  function lockSwatches() {
+    document.querySelectorAll('.color-swatch').forEach(s => {
+      s.classList.add('locked');
+    });
+    document.getElementById('colorHint').textContent = '— locked';
   }
 
-  function setColor(color, el) {
-    currentColor = color;
-    erasing = false;
-    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-    document.getElementById('customSwatch').classList.remove('active');
-    el.classList.add('active');
-    document.getElementById('eraserBtn').classList.remove('active');
+  function unlockSwatches() {
+    document.querySelectorAll('.color-swatch').forEach(s => {
+      s.classList.remove('locked');
+    });
+    document.getElementById('colorHint').textContent = '';
+    colorLocked = false;
+    hasDrawn = false;
   }
 
-  function setCustomColor(color) {
+  function setColor(color, name, el) {
+    if (colorLocked) return;
     currentColor = color;
+    currentColorName = name;
     erasing = false;
     document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-    const swatch = document.getElementById('customSwatch');
-    swatch.style.background = color;
-    swatch.classList.add('active');
+    el.classList.add('active');
     document.getElementById('eraserBtn').classList.remove('active');
   }
 
@@ -325,19 +309,39 @@
   function toggleEraser() {
     erasing = !erasing;
     document.getElementById('eraserBtn').classList.toggle('active', erasing);
-    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-    document.getElementById('customSwatch').classList.remove('active');
   }
 
   function clearCanvas() {
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    unlockSwatches();
+  }
+
+  function setCategory(cat, el) {
+    selectedCategory = cat;
+    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('categoryHint').textContent = '— ' + cat + ' selected';
+    updateSaveBtn();
+  }
+
+  function updateSaveBtn() {
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = !selectedCategory;
   }
 
   function saveCanvas() {
     if (!selectedCategory) return;
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-    const filename = selectedCategory.toUpperCase() + '-' + timestamp + '.png';
+    const now = new Date();
+    const timestamp = now.getFullYear().toString()
+      + String(now.getMonth() + 1).padStart(2, '0')
+      + String(now.getDate()).padStart(2, '0')
+      + String(now.getHours()).padStart(2, '0')
+      + String(now.getMinutes()).padStart(2, '0')
+      + String(now.getSeconds()).padStart(2, '0');
+    const cat = selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
+    const col = currentColorName.charAt(0).toUpperCase() + currentColorName.slice(1);
+    const filename = cat + '-' + col + '-' + timestamp + '.png';
     const link = document.createElement('a');
     link.download = filename;
     link.href = canvas.toDataURL('image/png');
